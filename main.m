@@ -23,3 +23,6 @@ end
 
 testNum = input('Enter the number of the face for which you want to find the match: ');
 classType = input('Choose (1) for SVM or (2) for Euclidean Distance: ');
+[nRow nCol M] = size(face);
+T = reshape(face,[nRow*nCol M]);
+mTot = mean(T,2);
