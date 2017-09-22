@@ -26,3 +26,20 @@ classType = input('Choose (1) for SVM or (2) for Euclidean Distance: ');
 [nRow nCol M] = size(face);
 T = reshape(face,[nRow*nCol M]);
 mTot = mean(T,2);
+A = T-repmat(mTot,1,M);
+[V,D] = eig(A'*A);
+eval = diag(D);
+
+peval = [];
+pevec = [];
+
+for i = M:-1:k+1
+    peval = [peval eval(i)];
+    pevec = [pevec V(:,i)];
+end
+
+% Obtaining the eigenvectors
+U = A * pevec;
+
+% Obtaining PCA weights
+ Wpca = U'*A;
