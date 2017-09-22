@@ -64,3 +64,13 @@ U = A * pevec;
           Sw = Sw + (Wpca(:,j)-cMean)*(Wpca(:,j)-cMean)';
      end
  end
+
+ % Obtaining Fisher eigenvectors and eigenvalues
+ [Vf, Df] = eig(Sb,Sw);
+
+ % Calculating weights
+  Df = fliplr(diag(Df));
+  Vf = fliplr(Vf);
+
+ % Calculating fisher weights
+ Wf = Vf'*Wpca;
