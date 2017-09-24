@@ -74,3 +74,25 @@ U = A * pevec;
 
  % Calculating fisher weights
  Wf = Vf'*Wpca;
+
+ % Support Vector Machine (LIBSCM Dependency)
+
+ if classType == 1
+
+     % testNum = 13*20;
+
+     % Reshape the selected face
+     Tr = reshape(face(:,:,testNum),[nRow*nCol 1]);
+     Ar = Tr-mTot;
+
+     % Obtain the weights of the normalized selected face
+     Wrec = Vf'*U'*Ar;
+
+     % SVM parameters. The kernel is a polynomial
+     c=1e9;
+     params=[' -t ' int2str(1) ' -c ' int2str(c)];
+
+     % prevArray starts with an array containing each class. Winner array is the
+     %classes that are selected in the binary tree
+     prevArr = [1:k];
+     winnerArr = [];
