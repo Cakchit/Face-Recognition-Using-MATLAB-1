@@ -96,3 +96,19 @@ U = A * pevec;
      %classes that are selected in the binary tree
      prevArr = [1:k];
      winnerArr = [];
+
+     for max = 1:1000
+         winnerArr = [];
+         for winRep = 1:2:length(prevArr)
+
+             % Selects the two classes to train the SVM
+             if winRep >= length(prevArr)
+                 i = prevArr(winRep) ;
+                 j = prevArr(winRep-1) ;
+             else
+                 i = prevArr(winRep)  ;
+                 j = prevArr(winRep+1)  ;
+             end
+
+             % Selects the features of the 2 classes
+             feature = [Wf(1:2,n*i-(n-1):n*i),Wf(1:2,n*j-(n-1):n*j)]';
