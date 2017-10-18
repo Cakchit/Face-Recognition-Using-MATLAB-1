@@ -1,5 +1,5 @@
 % Author: Arjun Nataraj
-
+% Face Recognition
 close all
 clear
 clc
@@ -112,3 +112,120 @@ U = A * pevec;
 
              % Selects the features of the 2 classes
              feature = [Wf(1:2,n*i-(n-1):n*i),Wf(1:2,n*j-(n-1):n*j)]';
+             % Assigns the labels for each class
+             for m1 = 1:n
+                label(m1) = 1;
+             end
+
+             for n1 = n+1:2*n
+                label(n1) = -1;
+             end
+
+             % The SVM is trained
+             model=svmtrain(label', feature, params);
+
+             % The face that the user selected is classified to any of the two
+             % classes
+             guessLab(1) = 1;
+             predLabel=svmpredict(guessLab',[Wrec(1) Wrec(2)],model);
+
+             predLabel;
+
+             % A winner class is selected
+             if predLabel == 1
+                 winnerArr = [winnerArr i];
+             elseif predLabel == -1
+                 winnerArr = [winnerArr j];
+             end
+
+             if winnerArr > 1
+                 for c1 = 2:length(winnerArr)
+                     if winnerArr(c1) == winnerArr(c1-1)
+                        winnerArr(c1) = [];
+                     end
+                 end
+             end
+
+         end
+
+         prevArr = winnerArr;
+
+        if length(winnerArr) < 2
+            winnerArr;
+             break
+         end
+     end
+
+     % This is the class that was selected
+     CLASS = winnerArr;
+
+     display('The class that matches your face is:')
+     display(CLASS)
+
+     % Plot the selected face
+     figure(1)
+     imagesc(reshape(Tr,nRow,nCol));
+     colormap gray;
+     title('Face selected')
+
+     % Plot the faces of the matching class
+     for i = 1:n
+         figure(i+1)
+         imagesc(reshape(T(:,winnerArr*n-i+1),nRow,nCol));
+         colormap gray;
+         title(strcat('Matching face number: ',num2str(winnerArr*n-i+1)));
+     end
+ end
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ % SELECT FACE BASED ON THE SHORTEST EUCLIDEAN DISTANCE
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ if classType == 2
+
+     % Calculate euclidean distance
+     %testNum = 134;
+
+     % Normalize selected image
+     Tr = reshape(face(:,:,testNum),[nRow*nCol 1]);
+     Ar = Tr-mTot;
+
+     % Obtain weights of the selected face
+     Wrec = Vf'*U'*Ar;
+
+     temp = 0;
+
+     % Obtaining an array of euclidean distances to each face
+     eDist = [];
+     for i = 1:M
+         eDist = [eDist sqrt(( norm( Wrec - Wf(:,i)) )^2)];
+     end
+
+     % Find minimum distance and the corresponding index
+     minDis = 999999;
+     minIndex = 0;
+
+     for i = 1:length(eDist)
+        if minDis > eDist(i) && i ~= testNum
+            minDis = eDist(i);
+            minIndex = i;
+        end
+     end
+
+     Matching_index = minIndex;
+
+     % Matching index
+     display(Matching_index);
+
+     % Plot selected face
+     figure(1)
+     imagesc(reshape(Tr,nRow,nCol));
+     colormap gray;
+     title('Face selected')
+
+     % Plot best match
+     figure(2)
+     imagesc(reshape(T(:,minIndex),nRow,nCol));
+     colormap gray;
+     title('Best match')
+ end
