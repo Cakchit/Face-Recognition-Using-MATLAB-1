@@ -1,5 +1,6 @@
 # Face-Recognition-Using-MATLAB
 
+By Arjun Nataraj
 This repository discusses the new Face Recognition Method that is based on Fisher's Discriminant Analysis (FLDA) and Support Vector Machines (SVM). The FLDA projects the high dimensional image space into a relatively low-dimensional space to acquire most discriminant features among the different classes.
 
 Recently, SVM has been used as a new technique for pattern classification and recognition. This repository uses SVM as a classifier, which classifies the images based on the extracted features.
